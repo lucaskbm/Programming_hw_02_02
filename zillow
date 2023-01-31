@@ -22,3 +22,28 @@ df.head()
 #To get the results only for Miami
 df_Miami = df[df['RegionName'] == 'Miami']
 df_Miami.head()
+
+
+
+## Updates to be reviewed 
+
+# Create X and y arrays
+X = df[["RegionName","State","SizeRank"]]
+y = df.drop(["RegionType", "RegionName","State", "StateName", "Metro","CountyName","SizeRank"],axis = 'columns')
+
+#Split 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Trying to clean the data 
+label_encoder = preprocessing.LabelEncoder()
+X['RegionName'] = label_encoder.fit_transform(X['RegionName'])
+X['State'] = label_encoder.fit_transform(X['State'])
+
+# Instantiate the model
+reg = LinearRegression()
+# Fit the model to the data
+reg.fit(X_train, y_train) #breaks (could not convert string to float)
+
+# Make predictions
+y_pred = reg.predict(X_test)
+print("Predictions: {}, Actual Values: {}".format(y_pred[:2], y_test[:2]))
